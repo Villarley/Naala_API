@@ -1,8 +1,11 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import Pin from '../models/Pin';
 import { sendEmail } from '../utils/emailSender';
 
-export const generatePin = async (req: Request, res: Response) => {
+export const generatePin = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
+
+  console.log('CORPORATE_EMAIL:', process.env.CORPORATE_EMAIL);
+  console.log('EMAIL_PASSWORD:', process.env.EMAIL_PASSWORD);
   const { proyecto, modelo, nombre, cedula, telefono, correo } = req.body;
 
   try {
@@ -20,7 +23,9 @@ export const generatePin = async (req: Request, res: Response) => {
       expiresAt,
     });
 
-    // Envía el PIN por correo
+    console.log('CORPORATE_EMAIL:', process.env.CORPORATE_EMAIL);
+    console.log('EMAIL_PASSWORD:', process.env.EMAIL_PASSWORD);
+
     await sendEmail(correo, pin);
     await sendEmail(process.env.CORPORATE_EMAIL!, pin);
 
@@ -33,6 +38,8 @@ export const generatePin = async (req: Request, res: Response) => {
 
 export const verifyPin = async (req: Request, res: Response) => {
     const { pin } = req.body;
+    console.log('Verificando PIN:', pin);
+    
   
     try {
       const foundPin = await Pin.findOne({ pin });
