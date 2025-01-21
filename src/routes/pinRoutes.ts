@@ -3,7 +3,7 @@ import { generatePin, verifyPin } from '../controllers/pinController';
 
 const router = express.Router();
 
-router.post('/generate', generatePin);
-router.post('/verify', verifyPin);
+
+router.post('/verifyPin', verifyPin as any);
 
 export default router;
