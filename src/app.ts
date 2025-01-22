@@ -8,10 +8,7 @@ dotenv.config();
 connectDB();
 
 const corsOptions = {
-    origin: [
-        'https://naala.vercel.app', 
-        'https://www.urbania-custom.com'
-    ],
+    origin: '*',
     optionsSuccessStatus: 200
 };
 
