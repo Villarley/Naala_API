@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn src/server.ts",
-    "start": "node dist/server.js",
+    "start": "node public/server.js",
     "build": "npx tsc"
   },
   "keywords": [],
