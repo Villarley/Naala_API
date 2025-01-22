@@ -7,15 +7,11 @@ import cors from 'cors';
 dotenv.config();
 connectDB();
 
-const corsOptions = {
-    origin: '*',
-    optionsSuccessStatus: 200
-};
 
 
 const app = express();
 app.use(express.json());
-app.use(cors(corsOptions));
+app.use(cors());
 app.use("/",
     (req, res)=>{
         res.json({msg:"saludos"})
