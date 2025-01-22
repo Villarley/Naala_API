@@ -7,9 +7,18 @@ import cors from 'cors';
 dotenv.config();
 connectDB();
 
+const corsOptions = {
+    origin: [
+        'https://naala.vercel.app', 
+        'https://www.urbania-custom.com'
+    ],
+    optionsSuccessStatus: 200
+};
+
+
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use('/api/pins', pinRoutes);
 
 export default app;
