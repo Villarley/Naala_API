@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
-    "outDir": "./public",
-    "module": "CommonJS",
+    "outDir": "dist", // El directorio donde se guardará el build
     "target": "ES2020",
+    "module": "CommonJS",
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "**/*.test.ts"]
 }

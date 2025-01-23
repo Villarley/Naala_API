@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "dev": "ts-node-dev --respawn src/server.ts",
-    "start": "node public/server.js",
-    "build": "npx tsc"
-  },
+    "scripts": {
+      "dev": "ts-node-dev --respawn src/server.ts",
+      "start": "node dist/server.js",
+      "build": "npx tsc"
+    },
   "keywords": [],
   "author": "",
   "license": "ISC",
