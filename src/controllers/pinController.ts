@@ -3,10 +3,7 @@ import Pin from '../models/Pin';
 import { sendEmail } from '../utils/emailSender';
 
 export const generatePin = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
-
-  console.log('CORPORATE_EMAIL:', process.env.CORPORATE_EMAIL);
-  console.log('EMAIL_PASSWORD:', process.env.EMAIL_PASSWORD);
-  const { proyecto, modelo, nombre, cedula, telefono, correo } = req.body;
+  const { proyecto, modelo, nombre, finca, cedula, telefono, correo } = req.body;
 
   try {
     const pin = Math.floor(100000 + Math.random() * 900000).toString(); // Genera un PIN de 6 dígitos
@@ -16,18 +13,32 @@ export const generatePin = async (req: Request, res: Response, next: NextFunctio
       proyecto,
       modelo,
       nombre,
+      finca,
       cedula,
       telefono,
       correo,
       pin,
       expiresAt,
     });
+    
 
-    console.log('CORPORATE_EMAIL:', process.env.CORPORATE_EMAIL);
-    console.log('EMAIL_PASSWORD:', process.env.EMAIL_PASSWORD);
+    const emailContent = {
+      to: correo,
+      subject: 'Acceso a la personalización de su hogar',
+      html: `
+        <p>Estimado cliente,</p>
+        <p>Reciba un cordial saludo de parte de todo el equipo de Urbania.</p>
+        <p>Por este medio, le compartimos el enlace de acceso a la plataforma de personalización de su hogar:</p>
+        <p><a href="https://urbania-custom.com/pin" target="_blank">Acceder a la personalización</a></p>
+        <p>Para ingresar, el sistema le solicitará el siguiente PIN: <strong>${pin}</strong></p>
+        <p>Tenga en cuenta que este PIN es de único uso y tiene una vigencia de 48 horas a partir de la recepción de este correo.</p>
+        <p>Si tiene alguna consulta o requiere asistencia, no dude en ponerse en contacto con nosotros.</p>
+        <p>Atentamente,<br>Equipo Urbania</p>
+      `,
+    };
 
-    await sendEmail(correo, pin);
-    await sendEmail(process.env.CORPORATE_EMAIL!, pin);
+    await sendEmail(emailContent);
+    await sendEmail({ ...emailContent, to: process.env.CORPORATE_EMAIL! });
 
     return res.status(201).json({ message: 'PIN generado exitosamente', pin });
   } catch (error) {
@@ -39,8 +50,6 @@ export const generatePin = async (req: Request, res: Response, next: NextFunctio
 export const verifyPin = async (req: Request, res: Response) => {
     const { pin } = req.body;
     console.log('Verificando PIN:', pin);
-    
-  
     try {
       const foundPin = await Pin.findOne({ pin });
   
@@ -64,5 +73,4 @@ export const verifyPin = async (req: Request, res: Response) => {
       console.error('Error verificando PIN:', error);
       return res.status(500).json({ message: 'Error interno del servidor' });
     }
-  };
-  
+};

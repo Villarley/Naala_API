@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import connectDB from './config/db';
 import pinRoutes from './routes/pinRoutes';
+import docxRoutes from './routes/docxRoutes';
 import cors from 'cors';
 
 dotenv.config();
@@ -18,5 +19,6 @@ app.use("/",
     }
 )
 app.use('/api/pins', pinRoutes);
+app.use('/api/docx', docxRoutes);
 
 export default app;
