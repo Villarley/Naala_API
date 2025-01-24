@@ -1,8 +1,8 @@
 {
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev --respawn src/server.ts",
-    "start": "NODE_ENV=production ts-node src/server.ts"
+    "start": "vercel dev",
+    "build": "tsc",
+    "deploy": "vercel --prod"
   },
   "dependencies": {
     "cors": "^2.8.5",
