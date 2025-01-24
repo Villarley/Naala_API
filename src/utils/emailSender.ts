@@ -1,20 +1,33 @@
 import nodemailer from 'nodemailer';
 
-export const sendEmail = async (to: string, pin: string) => {
+export interface MailOptions {
+  to: string;
+  subject: string;
+  text?: string;
+  html?: string;
+}
+
+export const sendEmail = async (mailOptions: MailOptions) => {
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT),
+    secure: true,
     auth: {
       user: process.env.CORPORATE_EMAIL,
       pass: process.env.EMAIL_PASSWORD,
     },
   });
 
-  const mailOptions = {
+  const fullMailOptions = {
     from: process.env.CORPORATE_EMAIL,
-    to,
-    subject: 'Tu PIN de personalización - Proyecto Naala',
-    text: `Hola, tu PIN de acceso es: ${pin}. Este PIN expirará en 48 horas.`,
+    ...mailOptions,
   };
 
-  await transporter.sendMail(mailOptions);
+  try {
+    await transporter.sendMail(fullMailOptions);
+    console.log(`Correo enviado exitosamente a: ${mailOptions.to}`);
+  } catch (error) {
+    console.error('Error enviando correo:', error);
+    throw new Error('No se pudo enviar el correo.');
+  }
 };
