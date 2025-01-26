@@ -34,6 +34,11 @@ export const generatePin = async (req: Request, res: Response, next: NextFunctio
         <p>Tenga en cuenta que este PIN es de único uso y tiene una vigencia de 48 horas a partir de la recepción de este correo.</p>
         <p>Si tiene alguna consulta o requiere asistencia, no dude en ponerse en contacto con nosotros.</p>
         <p>Atentamente,<br>Equipo Urbania</p>
+        <img src="cid:urbania_signature" alt="Urbania Signature" style="width: auto; height: auto;" />
+        <br />
+        <a href="mailto:personalizaciones@urbania.cr" style="background-color: #0056b3; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
+            Contactar Soporte
+        </a>
       `,
     };
 
