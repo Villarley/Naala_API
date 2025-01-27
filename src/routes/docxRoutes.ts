@@ -16,8 +16,8 @@ router.post('generateDocx', async (req: Request, res: Response): Promise<void> =
             return;
         }
 
-        const templatePath = path.join(__dirname, '../templates/Naala_contrato.docx');
-        if (!(await fs.pathExists(templatePath))) {
+        const templatePath = '../templates/Naala_contrato.docx';
+                if (!(await fs.pathExists(templatePath))) {
             throw new Error(`No se encontró la plantilla en la ruta: ${templatePath}`);
         }
         const content = await fs.readFile(templatePath, 'binary');
