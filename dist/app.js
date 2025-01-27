@@ -22,9 +22,6 @@ app.use((0, cors_1.default)({
     ],
     credentials: true,
 }));
-app.use("/", (req, res) => {
-    res.json({ msg: "saludos" });
-});
 app.use("/api/pins", pinRoutes_1.default);
 app.use("/api/docx", docxRoutes_1.default);
 exports.default = app;
