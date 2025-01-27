@@ -94,8 +94,8 @@ const emailContent = {
             path: path.join(__dirname, '../assets/UrbaniaSignature.png'),
             cid: 'urbania_signature'
         },
-    ],
-};
+        ],
+    };
 
 
         // Enviar correo con el contrato adjunto en formato PDF
