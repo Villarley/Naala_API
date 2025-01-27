@@ -15,7 +15,7 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-    origin: ["https://www.urbania-custom.com/", "https://naala.vercel.app/"],
+    origin: ["https://urbania-custom.com/", "https://naala.vercel.app/"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   }));
