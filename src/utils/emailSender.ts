@@ -10,6 +10,8 @@ export interface MailOptions {
 export const sendEmail = async (mailOptions: MailOptions) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
+    host: 'smtp.gmail.com',
+    port: 465,
     secure: true,
     auth: {
       user: process.env.CORPORATE_EMAIL,
