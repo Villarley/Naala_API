@@ -22,9 +22,6 @@ app.use(
       credentials: true,
     })
   );
-  app.use("/", (req, res) => {
-    res.json({ msg: "saludos" });
-  });
   app.use("/api/pins", pinRoutes);
   app.use("/api/docx", docxRoutes);
 
