@@ -8,7 +8,7 @@ import { convertDocxToPdf } from '../utils/docxToPDF';
 
 const router = Router();
 
-router.post('/generateDocx', async (req: Request, res: Response): Promise<void> => {
+router.post('generateDocx', async (req: Request, res: Response): Promise<void> => {
     try {
         const { selectedOptions, clientEmail, fecha, finca, modelo, propietario, proyecto } = req.body;
         if (!selectedOptions || !clientEmail || !fecha || !finca || !modelo || !propietario) {
