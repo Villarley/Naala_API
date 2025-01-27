@@ -7,7 +7,11 @@ import cors from 'cors';
 
 dotenv.config();
 connectDB();
-
+/*
+                                           /generateDocx
+https://naala-api-steel.vercel.app/api/pins/generateDocx
+https://naala-api-steel.vercel.app/api/pins/verifyPin
+*/
 
 
 const app = express();
@@ -19,11 +23,7 @@ app.use(cors({
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   }));
-app.use("/",
-    (req, res)=>{
-        res.json({msg:"saludos"})
-    }
-)
+
 app.use('/api/pins', pinRoutes);
 app.use('/api/docx', docxRoutes);
 
