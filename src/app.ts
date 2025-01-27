@@ -12,9 +12,20 @@ const app = express();
 // Use express
 app.use(express.json());
 
-app.options('*', cors()); // Permite solicitudes preflight para todas las rutas
-
-app.use("/api/pins", pinRoutes);
-app.use("/api/docx", docxRoutes);
+app.use(
+    cors({
+      origin: [
+        "https://urbania-custom.com",
+        "https://www.urbania-custom.com",
+        "https://naala.vercel.app",
+      ],
+      credentials: true,
+    })
+  );
+  app.use("/", (req, res) => {
+    res.json({ msg: "saludos" });
+  });
+  app.use("/api/pins", pinRoutes);
+  app.use("/api/docx", docxRoutes);
 
 export default app;
