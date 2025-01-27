@@ -5,20 +5,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendEmail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
-const sendEmail = async (to, pin) => {
+const sendEmail = async (mailOptions) => {
     const transporter = nodemailer_1.default.createTransport({
-        service: 'gmail',
+        host: process.env.SMTP_HOST,
+        port: Number(process.env.SMTP_PORT),
+        secure: true,
         auth: {
             user: process.env.CORPORATE_EMAIL,
             pass: process.env.EMAIL_PASSWORD,
         },
     });
-    const mailOptions = {
+    const fullMailOptions = {
         from: process.env.CORPORATE_EMAIL,
-        to,
-        subject: 'Tu PIN de personalización - Proyecto Naala',
-        text: `Hola, tu PIN de acceso es: ${pin}. Este PIN expirará en 48 horas.`,
+        ...mailOptions,
     };
-    await transporter.sendMail(mailOptions);
+    try {
+        await transporter.sendMail(fullMailOptions);
+        console.log(`Correo enviado exitosamente a: ${mailOptions.to}`);
+    }
+    catch (error) {
+        console.error('Error enviando correo:', error);
+        throw new Error('No se pudo enviar el correo.');
+    }
 };
 exports.sendEmail = sendEmail;

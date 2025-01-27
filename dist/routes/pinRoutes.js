@@ -1,11 +1,9 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
+const express_1 = require("express");
 const pinController_1 = require("../controllers/pinController");
-const router = express_1.default.Router();
+const router = (0, express_1.Router)();
 router.post("/generate", pinController_1.generatePin);
 router.post('/verifyPin', pinController_1.verifyPin);
+router.post('/generateDocx', pinController_1.generateDocx);
 exports.default = router;

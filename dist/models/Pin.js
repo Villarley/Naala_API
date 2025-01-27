@@ -38,12 +38,14 @@ const pinSchema = new mongoose_1.Schema({
     proyecto: { type: String, required: true },
     modelo: { type: String, required: true },
     nombre: { type: String, required: true },
-    cedula: { type: Number, required: true },
-    telefono: { type: Number, required: true },
+    finca: { type: String, required: true }, // Cambiado de 'finca'
+    cedula: { type: String, required: true }, // Cambiado a string
+    telefono: { type: String, required: true }, // Cambiado a string
     correo: { type: String, required: true },
     pin: { type: String, required: true, unique: true },
     expiresAt: { type: Date, required: true },
-    used: { type: Boolean, default: false }, // Indica si el PIN ya fue usado
+    used: { type: Boolean, default: false },
 });
+// Agregar un índice TTL (Time To Live) para la expiración
 pinSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 exports.default = mongoose_1.default.model('Pin', pinSchema);
