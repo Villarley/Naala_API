@@ -12,20 +12,7 @@ const app = express();
 // Use express
 app.use(express.json());
 
-app.use(
-  cors({
-    origin: [
-      "https://urbania-custom.com",
-      "https://www.urbania-custom.com",
-      "https://naala.vercel.app",
-      "https://urbania-custom.com/",
-      "https://www.urbania-custom.com/",
-      "https://naala.vercel.app/",
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
+app.options('*', cors()); // Permite solicitudes preflight para todas las rutas
 
 app.use("/api/pins", pinRoutes);
 app.use("/api/docx", docxRoutes);
