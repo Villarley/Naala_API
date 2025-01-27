@@ -25,6 +25,6 @@ app.use(cors({
   }));
 
 app.use('/api/pins', pinRoutes);
-app.use('/api/docx', docxRoutes);
+app.use('/api/', docxRoutes);
 
 export default app;
