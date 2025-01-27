@@ -61,40 +61,39 @@ export const generateDocx = async (req: Request, res: Response): Promise<void> =
   try {
       const { selectedOptions, clientEmail, fecha, finca, modelo, propietario, proyecto } = req.body;
 
-      // Validar datos requeridos
+      // Validate required data
       if (!selectedOptions || !clientEmail || !fecha || !finca || !modelo || !propietario) {
           res.status(400).json({ error: 'Faltan datos requeridos' });
           return;
       }
 
-      // Ruta de la plantilla
+      // Template path
       const templatePath = path.join(process.cwd(), 'templates/Naala_contrato.docx');
       if (!(await fs.pathExists(templatePath))) {
           throw new Error(`No se encontró la plantilla en la ruta: ${templatePath}`);
       }
 
+      // Load and parse the DOCX template
       const content = await fs.readFile(templatePath, 'binary');
       const zip = new PizZip(content);
       const doc = new Docxtemplater(zip);
 
-      // Procesar las modificaciones
-      const modificaciones = Object.entries(selectedOptions as { [key: string]: any[] }).map(([key, options]) => ({
+      // Prepare modifications for the template
+      const modificaciones = Object.entries(selectedOptions).map(([key, options]) => ({
           pregunta: key,
-          opciones: options.map((option) => ({
+          opciones: options.map((option: any) => ({
               nombre: option.name,
               precio: `$${option.price.toFixed(2)}`
           }))
       }));
 
-      // Calcular el total
-      const total = modificaciones
-          .reduce((acc, item) => {
-              const subtotal = item.opciones.reduce((sum, option) => sum + parseFloat(option.precio.replace('$', '')), 0);
-              return acc + subtotal;
-          }, 0)
-          .toFixed(2);
+      // Calculate the total
+      const total = modificaciones.reduce((acc, item) => {
+          const subtotal = item.opciones.reduce((sum, option) => sum + parseFloat(option.precio.replace('$', '')), 0);
+          return acc + subtotal;
+      }, 0).toFixed(2);
 
-      // Setear los datos en la plantilla
+      // Inject data into the template
       doc.setData({
           fecha,
           finca,
@@ -106,19 +105,19 @@ export const generateDocx = async (req: Request, res: Response): Promise<void> =
 
       doc.render();
 
-      // Rutas para los archivos temporales en /tmp
+      // Temporary file paths
       const contractFileName = `${propietario}-Contrato.docx`;
       const pdfFileName = `${propietario}-Contrato.pdf`;
-      const filePath = path.join('/tmp', contractFileName);
+      const docxPath = path.join('/tmp', contractFileName);
       const pdfPath = path.join('/tmp', pdfFileName);
 
-      // Guardar archivo DOCX temporal
-      await fs.writeFile(filePath, doc.getZip().generate({ type: 'nodebuffer' }));
+      // Save the rendered DOCX file
+      await fs.writeFile(docxPath, doc.getZip().generate({ type: 'nodebuffer' }));
 
-      // Convertir a PDF
-      await convertDocxToPdf(filePath, pdfPath);
+      // Convert DOCX to PDF
+      await convertDocxToPdf(docxPath, pdfPath);
 
-      // Configuración del correo electrónico
+      // Prepare email content
       const emailContent = {
           to: clientEmail,
           subject: `Acceso a su contrato de personalización. FF ${finca}, Proyecto: ${proyecto}`,
@@ -135,19 +134,17 @@ export const generateDocx = async (req: Request, res: Response): Promise<void> =
           ],
       };
 
-      // Enviar correo al cliente y a soporte
-      await sendEmail(emailContent);
-      emailContent.to = 'info@urbania-custom.com';
+      // Send email to client and support
       await sendEmail(emailContent);
 
-      // Enviar el archivo PDF como respuesta
+      // Send the PDF as a response
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader('Content-Disposition', `attachment; filename=${pdfFileName}`);
       const pdfBuffer = await fs.readFile(pdfPath);
       res.send(pdfBuffer);
 
-      // Limpiar los archivos temporales
-      await fs.unlink(filePath);
+      // Cleanup temporary files
+      await fs.unlink(docxPath);
       await fs.unlink(pdfPath);
 
   } catch (error: any) {
