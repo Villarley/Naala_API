@@ -113,6 +113,7 @@ const emailContent = {
         await fs.unlink(filePath);
         await fs.unlink(pdfPath);
     } catch (error: any) {
+        console.error('Error generando contrato:', error);
         res.status(500).json({ 
             error: 'Error interno del servidor', 
             details: error.message || error 
